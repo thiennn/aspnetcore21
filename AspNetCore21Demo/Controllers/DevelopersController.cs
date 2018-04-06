@@ -9,7 +9,7 @@ using AspNetCore21Demo.Data;
 
 namespace AspNetCore21Demo.Controllers
 {
-    [Produces("application/json")]
+    [ApiController]
     [Route("api/[controller]")]
     public class DevelopersController : Controller
     {
@@ -24,18 +24,20 @@ namespace AspNetCore21Demo.Controllers
         [HttpGet]
         public IEnumerable<Developer> GetDevelopers()
         {
+            //var r = new Random();
+            //var oneOrTwo = r.Next(1, 3);
+            //if(oneOrTwo == 1)
+            //{
+            //    throw new InvalidOperationException("Opps!");
+            //}
+
             return _context.Developers;
         }
 
         // GET: api/Developers/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDeveloper([FromRoute] int id)
+        public async Task<ActionResult<Developer>> GetDeveloper([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var developer = await _context.Developers.FindAsync(id);
 
             if (developer == null)
@@ -50,11 +52,6 @@ namespace AspNetCore21Demo.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDeveloper([FromRoute] int id, [FromBody] Developer developer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             if (id != developer.Id)
             {
                 return BadRequest();
@@ -85,11 +82,6 @@ namespace AspNetCore21Demo.Controllers
         [HttpPost]
         public async Task<IActionResult> PostDeveloper([FromBody] Developer developer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             _context.Developers.Add(developer);
             await _context.SaveChangesAsync();
 
@@ -100,11 +92,6 @@ namespace AspNetCore21Demo.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDeveloper([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var developer = await _context.Developers.FindAsync(id);
             if (developer == null)
             {
